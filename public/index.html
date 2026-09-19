@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10241f">
+  <title>WordMine | Find the uncommon words</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="WordMine home"><span class="brand-mark">W</span> wordmine</a>
+      <div class="connection"><span id="connection-dot" class="connection-dot"></span><span id="connection-text">Connecting</span></div>
+    </header>
+
+    <section id="lobby-view" class="view lobby-view">
+      <div class="lobby-copy">
+        <p class="eyebrow">A multiplayer word duel</p>
+        <h1>Dig deeper<br><em>than the obvious.</em></h1>
+        <p class="intro">Build words from the same base word as everyone else. The rarest finds are worth the most.</p>
+      </div>
+      <div class="lobby-panel panel">
+        <div id="join-form-wrap">
+          <p class="panel-kicker">Enter the mine</p>
+          <h2>Choose your handle</h2>
+          <form id="join-form">
+            <label for="username">Username</label>
+            <div class="input-row"><input id="username" name="username" maxlength="18" autocomplete="nickname" placeholder="e.g. wordsmith" required><button type="submit" class="button primary">Join lobby</button></div>
+          </form>
+          <p id="join-error" class="form-message" role="alert"></p>
+        </div>
+        <div id="waiting-room" class="hidden">
+          <div class="panel-heading"><div><p class="panel-kicker">The mine entrance</p><h2>Players ready</h2></div><span id="player-count" class="count-badge">0</span></div>
+          <ul id="lobby-players" class="player-list"></ul>
+          <p id="lobby-status" class="lobby-status">Waiting for one more player...</p>
+          <label for="round-count">Number of rounds</label>
+          <select id="round-count" class="round-select">
+            <option value="1">1 round</option>
+            <option value="3">3 rounds</option>
+            <option value="5" selected>5 rounds</option>
+            <option value="7">7 rounds</option>
+            <option value="10">10 rounds</option>
+          </select>
+          <button id="start-button" class="button primary full" disabled>Start game</button>
+          <p id="start-error" class="form-message" role="alert"></p>
+        </div>
+      </div>
+    </section>
+
+    <section id="game-view" class="view game-view hidden">
+      <div class="game-header">
+        <div><p class="eyebrow" id="round-label">Round 1 of 5</p><h1>Find the uncommon.</h1></div>
+        <div class="timer-wrap"><span class="timer-label">Time left</span><strong id="timer">02:00</strong></div>
+      </div>
+      <div class="base-word-panel"><span class="base-label">Your base word</span><strong id="base-word">—</strong><span class="base-hint">Use its letters. Every letter has a limit.</span></div>
+      <div class="game-grid">
+        <section class="entry-panel panel">
+          <div class="panel-heading"><div><p class="panel-kicker">Your excavation</p><h2>Submit a word</h2></div><span id="word-count" class="count-badge">0</span></div>
+          <form id="word-form" class="word-form"><input id="word-input" autocomplete="off" autocapitalize="none" placeholder="Type a word..." maxlength="24" required><button class="button primary" type="submit" aria-label="Submit word">Submit <span class="arrow">↗</span></button></form>
+          <p id="word-message" class="form-message" role="status"></p>
+          <div id="word-list" class="word-list" aria-live="polite"></div>
+        </section>
+        <aside class="score-panel panel"><div class="panel-heading"><div><p class="panel-kicker">Live standings</p><h2>Scoreboard</h2></div></div><ol id="scoreboard" class="scoreboard"></ol></aside>
+      </div>
+    </section>
+
+    <section id="results-view" class="results-view hidden" aria-live="polite">
+      <div class="results-card panel"><p class="eyebrow" id="results-eyebrow">Round complete</p><h2 id="results-title">The uncommon words</h2><div id="winner-callout" class="winner-callout"></div><p id="results-summary" class="results-summary"></p><div id="results-list" class="results-list"></div><button id="new-game-button" class="button primary hidden">Mine again</button></div>
+    </section>
+  </main>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/config.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
