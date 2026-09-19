@@ -81,14 +81,30 @@ function openResults(payload) {
 socket.on('connect', () => {
   $('#connection-dot').classList.add('online');
   $('#connection-text').textContent = 'Connected';
+  if (state.id) {
+    state.id = socket.id;
+    state.name = '';
+    gameView.classList.add('hidden');
+    resultsView.classList.add('hidden');
+    lobbyView.classList.remove('hidden');
+    $('#join-form-wrap').classList.remove('hidden');
+    $('#waiting-room').classList.add('hidden');
+    showMessage('#join-error', 'Your connection restarted. Join the lobby again to continue.');
+  }
 });
 socket.on('disconnect', () => {
   $('#connection-dot').classList.remove('online');
   $('#connection-text').textContent = 'Reconnecting';
+  $('#word-input').disabled = true;
+  $('#word-form button').disabled = true;
 });
 socket.on('joined', ({ id, name }) => { state.id = id; state.name = name; $('#join-form-wrap').classList.add('hidden'); $('#waiting-room').classList.remove('hidden'); });
 socket.on('lobby-state', (payload) => {
   renderPlayers(payload.players);
+  if (payload.phase === 'round' && state.name) {
+    $('#word-input').disabled = false;
+    $('#word-form button').disabled = false;
+  }
   if (state.name) {
     $('#join-form-wrap').classList.add('hidden');
     $('#waiting-room').classList.remove('hidden');

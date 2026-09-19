@@ -247,7 +247,8 @@ io.on('connection', (socket) => {
 
   socket.on('submit-word', (rawWord, reply) => {
     const player = players.get(socket.id);
-    if (!player || game.phase !== 'round') return reply?.({ ok: false, error: 'Submissions are closed.' });
+    if (!player) return reply?.({ ok: false, error: 'Your lobby session ended. Please join the lobby again.' });
+    if (game.phase !== 'round') return reply?.({ ok: false, error: 'This round has ended. Wait for the next round to begin.' });
     const result = validDerivative(String(rawWord || ''));
     if (!result.valid) return reply?.({ ok: false, error: result.reason });
     if (player.words.has(result.word)) return reply?.({ ok: false, error: 'You already found that word.' });
