@@ -72,6 +72,26 @@ gcloud run services update wordmine \
 
 The game state remains in Cloud Run memory. Restarting or scaling the service to a new instance clears the lobby and active game, so this deployment is appropriate for a lightweight single-room game rather than durable production matchmaking.
 
+## Deploy on Render
+
+Render can run the Node.js server and serve the frontend from the same URL, which keeps Socket.io on the same origin.
+
+1. Push this project to a GitHub or GitLab repository.
+2. Open [render.com](https://render.com), sign in, and choose **New +** then **Blueprint**.
+3. Select the repository containing this project. Render will detect `render.yaml`.
+4. Choose the free plan and create the web service.
+
+The Blueprint uses:
+
+- Build command: `npm ci`
+- Start command: `npm start`
+- Health check: `/`
+- Service type: Node.js web service
+
+Render will provide a URL similar to `https://wordmine.onrender.com`. Open that URL in two browser windows to test multiplayer play.
+
+You can also create a Render **Web Service** manually with the same build and start commands. No database or environment variables are required. The free plan may sleep after inactivity, and because game state is in memory, a restart clears the lobby and active game.
+
 ## Project structure
 
 - `server.js` owns the lobby, round timer, dictionary validation, submissions, scoring, and Socket.io events.

@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: wordmine
+    runtime: node
+    region: ohio
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /
